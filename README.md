@@ -66,7 +66,7 @@ react-native link react-native-audio-focus
    ```xml
    <manifest>
     ...
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     ...
    </manifest>
    ```
