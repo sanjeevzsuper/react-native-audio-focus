@@ -1,31 +1,37 @@
-import * as React from 'react';
+import React from 'react';
+import { View, Text, Button } from 'react-native';
+import AudioFocusModule from 'react-native-audio-focus';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-audio-focus';
-
-export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
+const App = () => {
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    const unsubscribe = AudioFocusModule.addAudioFocusListener((event) => {
+      if (event === 'AUDIOFOCUS_GAIN') {
+        console.log('Audio focus gained');
+        // Resume playback or increase volume
+      } else if (event === 'AUDIOFOCUS_LOSS') {
+        console.log('Audio focus lost');
+        // Pause playback or lower volume
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
+    <View>
+      <Text>Audio Focus Module Example</Text>
+      <Button
+        title="Request Audio Focus"
+        onPress={() => AudioFocusModule.requestAudioFocus()}
+      />
+      <Button
+        title="Abandon Audio Focus"
+        onPress={() => AudioFocusModule.abandonAudioFocus()}
+      />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
+export default App;

@@ -1,22 +1,45 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
+import { AudioFocusEvent } from './types';
 
-const LINKING_ERROR =
-  `The package 'react-native-audio-focus' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
+const { AudioFocusModule } = NativeModules;
+const audioFocusEmitter = new NativeEventEmitter(AudioFocusModule);
 
-const AudioFocus = NativeModules.AudioFocus
-  ? NativeModules.AudioFocus
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const requestAudioFocus = () => {
+  AudioFocusModule.requestAudioFocus();
+};
 
-export function multiply(a: number, b: number): Promise<number> {
-  return AudioFocus.multiply(a, b);
-}
+const abandonAudioFocus = () => {
+  AudioFocusModule.abandonAudioFocus();
+};
+
+const addAudioFocusListener = (listener: (event: string) => void) => {
+  const gainSubscription = audioFocusEmitter.addListener(
+    AudioFocusEvent.Gain,
+    () => listener(AudioFocusEvent.Gain)
+  );
+  const lossSubscription = audioFocusEmitter.addListener(
+    AudioFocusEvent.Loss,
+    () => listener(AudioFocusEvent.Loss)
+  );
+  const transientSubscription = audioFocusEmitter.addListener(
+    AudioFocusEvent.LossTransient,
+    () => listener(AudioFocusEvent.LossTransient)
+  );
+  const canDuckSubscription = audioFocusEmitter.addListener(
+    AudioFocusEvent.LossTransientDuck,
+    () => listener(AudioFocusEvent.LossTransientDuck)
+  );
+  return () => {
+    gainSubscription.remove();
+    lossSubscription.remove();
+    transientSubscription.remove();
+    canDuckSubscription.remove();
+  };
+};
+
+export default {
+  requestAudioFocus,
+  abandonAudioFocus,
+  addAudioFocusListener,
+  AudioFocusEvent,
+};
