@@ -2,15 +2,18 @@ package com.audiofocus;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import javax.annotation.Nullable;
 
 public class AudioFocusModule extends ReactContextBaseJavaModule implements AudioManager.OnAudioFocusChangeListener {
     private static ReactApplicationContext reactContext;
-    private AudioManager audioManager;
+    private final AudioManager audioManager;
 
     AudioFocusModule(ReactApplicationContext context) {
         super(context);
@@ -18,6 +21,7 @@ public class AudioFocusModule extends ReactContextBaseJavaModule implements Audi
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
+    @NonNull
     @Override
     public String getName() {
         return "AudioFocusModule";
@@ -25,12 +29,7 @@ public class AudioFocusModule extends ReactContextBaseJavaModule implements Audi
 
     @ReactMethod
     public void requestAudioFocus() {
-        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            Log.d("AudioFocusModule", "Audio focus request granted");
-        } else {
-            Log.d("AudioFocusModule", "Audio focus request failed");
-        }
+        audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     }
 
     @ReactMethod
@@ -43,16 +42,16 @@ public class AudioFocusModule extends ReactContextBaseJavaModule implements Audi
         String event = null;
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
-                event = "AUDIOFOCUS_GAIN";
+                event = "AUDIO_FOCUS_GAIN";
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-                event = "AUDIOFOCUS_LOSS";
+                event = "AUDIO_FOCUS_LOSS";
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                event = "AUDIOFOCUS_LOSS_TRANSIENT";
+                event = "AUDIO_FOCUS_LOSS_TRANSIENT";
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                event = "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK";
+                event = "AUDIO_FOCUS_LOSS_TRANSIENT_CAN_DUCK";
                 break;
         }
         if (event != null) {
@@ -61,8 +60,6 @@ public class AudioFocusModule extends ReactContextBaseJavaModule implements Audi
     }
 
     private void sendEvent(String eventName) {
-        reactContext
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit(eventName, null);
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, null);
     }
 }
