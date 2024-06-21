@@ -1,4 +1,4 @@
-declare module 'react-native-audio-focus-module' {
+declare module 'react-native-audio-focus' {
   type AudioFocusEvent =
     | 'AUDIOFOCUS_LOSS'
     | 'AUDIOFOCUS_GAIN'

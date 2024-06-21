@@ -1,6 +1,6 @@
 {
   "name": "react-native-audio-focus",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A React Native library to handle audio focus changes on both Android and iOS. This module allows React Native applications to respond to audio focus changes such as when another app starts playing audio or when a phone call is received. It helps in managing audio playback effectively by pausing or lowering the volume of the audio when necessary",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
