@@ -22,13 +22,13 @@ A React Native library to handle audio focus changes on both Android and iOS. Th
 ## Installation
 
 ```sh
-npm install react-native-audio-focus-module
+npm install react-native-audio-focus
 ```
 
 or
 
 ```sh
-yarn add react-native-audio-focus-module
+yarn add react-native-audio-focus
 ```
 
 ## Linking
@@ -36,7 +36,7 @@ yarn add react-native-audio-focus-module
 For React Native 0.60 and above, the library is automatically linked using autolinking. For older versions, you need to manually link the library:
 
 ```sh
-react-native link react-native-audio-focus-module
+react-native link react-native-audio-focus
 ```
 
 ## Android Setup
@@ -94,7 +94,7 @@ react-native link react-native-audio-focus-module
 - Import the library into your React Native project:
 
 ```typescript
-import AudioFocusModule from 'react-native-audio-focus-module';
+import AudioFocusModule from 'react-native-audio-focus';
 ```
 
 - Request Audio Focus
@@ -131,7 +131,7 @@ unsubscribe();
 ```typescript
 import React, { useEffect } from 'react';
 import { View, Text, Button } from 'react-native';
-import AudioFocusModule from 'react-native-audio-focus-module';
+import AudioFocusModule from 'react-native-audio-focus';
 
 const App = () => {
   useEffect(() => {
