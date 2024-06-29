@@ -80,27 +80,14 @@ react-native link react-native-audio-focus
    - Xcode will prompt you to create a bridging header. Accept the prompt.
 
 2. **Add the Audio Focus Module**: Ensure that **AudioFocusModule.swift** is correctly added to your project.
-3. **Create Bridge**: Create **AudioFocusModuleBridge.m** and in **ios** folder.
-   ```obj
-     //
-     //  AudioFocusModuleBridge.m
-     //
-    
-      #import <React/RCTBridgeModule.h>
-      #import <React/RCTEventEmitter.h>
-      @interface RCT_EXTERN_MODULE(AudioFocusModule, RCTEventEmitter)
-      RCT_EXTERN_METHOD(requestAudioFocus)
-      RCT_EXTERN_METHOD(abandonAudioFocus)
-      @end
-   ```
-5. **Modify Header File**: Add below line in **Your_Project-Bridging-Header.h:
+3. **Modify Header File**: Add below line in **Your_Project-Bridging-Header.h:
 
    ```objc
      #import <React/RCTBridgeModule.h>
      #import <React/RCTEventEmitter.h>
    ```
 
-6. **Register the Module**: No need to explicitly register the module in **AppDelegate.m**, as it's done automatically.
+4. **Register the Module**: No need to explicitly register the module in **AppDelegate.m**, as it's done automatically.
 
 ## Usage
 
